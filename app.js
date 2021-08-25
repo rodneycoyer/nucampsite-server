@@ -10,6 +10,21 @@ const campsiteRouter = require('./routes/campsiteRouter');
 const partnerRouter = require('./routes/partnerRouter');
 const promotionRouter = require('./routes/promotionRouter');
 
+const mongoose = require('mongoose');
+const { mongo } = require('mongoose');
+// mongo server url
+const url = 'mongodb://localhost:27017/nucampsite';
+const connect = mongoose.connect(url, {
+  useCreateIndex: true,
+  useFindAndModify: false,
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
+connect.then(() => console.log('Connected correctly to server'),
+   err => console.log(err)
+);
+
 // instantiate express class
 const app = express();
 
@@ -20,6 +35,7 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 // parses res.body object and stores json properties
 app.use(express.json());
+// parses URL-encoded data with the querystring library
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 // serving static files from public folder
