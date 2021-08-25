@@ -14,6 +14,7 @@ const mongoose = require('mongoose');
 const { mongo } = require('mongoose');
 // mongo server url
 const url = 'mongodb://localhost:27017/nucampsite';
+// connect to mongo server using mongoose
 const connect = mongoose.connect(url, {
   useCreateIndex: true,
   useFindAndModify: false,
