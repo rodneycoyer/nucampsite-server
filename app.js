@@ -3,6 +3,10 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const session = require('express-session');
+const FileStore = require('session-file-store')(session);
+const passport = require('passport');
+const authenticate = require('./authenticate');
 // Routers
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -37,17 +41,44 @@ app.use(logger('dev'));
 app.use(express.json());
 // parses URL-encoded data with the querystring library
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+//app.use(cookieParser('12345-67890-09876-54321'));
 
+// locally store user session
+app.use(session({
+  name: 'session-id',
+  secret: '12345-67890-09876-54321',
+  saveUninitialized: false,
+  resave: false,
+  store: new FileStore()
+}));
 
+// auth and session
+app.use(passport.initialize());
+app.use(passport.session());
 
+// router routes !auth access
+app.use('/', indexRouter);
+app.use('/users', userRouter);
 
+// check for user authentication
+function auth(req, res, next) {
+  console.log(req.user);
+
+  if (!req,user) {
+    const err = new Error ('You are not authenticated!');
+    err.status = 403;
+    return next(err);
+  } else {
+    return next();
+  }
+}
+
+app.use(auth);
 
 // serving static files from public folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-// router routes
-app.use('/', indexRouter);
+// router routes - auth required
 app.use('/users', usersRouter);
 app.use('/campsites', campsiteRouter);
 app.use('/partners', partnerRouter);
