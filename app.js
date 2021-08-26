@@ -11,7 +11,6 @@ const partnerRouter = require('./routes/partnerRouter');
 const promotionRouter = require('./routes/promotionRouter');
 
 const mongoose = require('mongoose');
-const { mongo } = require('mongoose');
 // mongo server url
 const url = 'mongodb://localhost:27017/nucampsite';
 // connect to mongo server using mongoose
@@ -32,13 +31,18 @@ const app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-// logger middleware
+// morgan middleware
 app.use(logger('dev'));
 // parses res.body object and stores json properties
 app.use(express.json());
 // parses URL-encoded data with the querystring library
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+
+
+
+
 // serving static files from public folder
 app.use(express.static(path.join(__dirname, 'public')));
 

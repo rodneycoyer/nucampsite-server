@@ -23,7 +23,6 @@ const commentSchema = new Schema({
     timestamps: true
 });
 
-// create schema
 const campsiteSchema = new Schema({
     name: {
         type: String,
@@ -51,7 +50,7 @@ const campsiteSchema = new Schema({
         type: Boolean,
         default: false
     },
-    comments: [commentSchema]
+    comments: [commentSchema] // comment sub-document
 }, {
     timestamps: true
 });
